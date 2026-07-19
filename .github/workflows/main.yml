@@ -312,11 +312,11 @@ jobs:
           echo "**Feature Set:** ${{ inputs.feature_set }}"
           echo "**KSU Branch:** ${{ inputs.ksu_branch || 'latest dev' }}"
           echo
-          
+
           # Count successes and failures
           SUCCESS_COUNT=0
           FAIL_COUNT=0
-          
+
           # Sort summaries so they appear in a consistent order
           for f in ./summaries/*.md; do
             [ -f "$f" ] || continue
@@ -326,7 +326,7 @@ jobs:
               FAIL_COUNT=$((FAIL_COUNT + 1))
             fi
           done
-          
+
           TOTAL=$((SUCCESS_COUNT + FAIL_COUNT))
           echo "**Results:** ${SUCCESS_COUNT}/${TOTAL} succeeded"
           if [ "$FAIL_COUNT" -gt 0 ]; then
@@ -335,7 +335,7 @@ jobs:
           echo
           echo "---"
           echo
-          
+
           # Output each summary
           for f in ./summaries/*.md; do
             [ -f "$f" ] || continue
@@ -344,7 +344,7 @@ jobs:
             echo "---"
             echo
           done
-          
+
           echo
           echo "> **SUSFS Commits:**"
           echo "> - android12-5.10: ${{ inputs.susfs_commit_android12-5-10 || 'latest' }}"
@@ -404,7 +404,7 @@ jobs:
           local target="$1"
           local job_name="$2"
           local result="$3"
-          
+
           if [[ "$current_type" == "all" || "$current_type" == "$target" ]]; then
             if [[ "$result" != "success" ]]; then
               echo "Required job $job_name did not succeed (result: $result)"
@@ -516,8 +516,7 @@ jobs:
 
         # Extract version info
         COMMITS_COUNT=$(git rev-list --count HEAD)
-        BASE_VERSION=30000
-        KSU_VERSION=$(expr $COMMITS_COUNT "+" $BASE_VERSION)
+        KSU_VERSION=33214
 
         # Extract git tag
         KSU_GIT_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "no-tag")

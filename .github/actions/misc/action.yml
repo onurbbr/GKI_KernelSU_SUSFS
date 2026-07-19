@@ -33,4 +33,8 @@ runs:
           CONFIG_BTF=y
           CONFIG_BPF_EVENTS=y
           CONFIG_FUSE_BPF=y
-          
+          CONFIG_LRU_GEN_ENABLED=y
+          CONFIG_HZ_300=y
+          CONFIG_ZRAM_DEF_COMP_LZ4=y
+          CONFIG_ZRAM_DEF_COMP="lz4"
+          CONFIG_USER_NS=y
