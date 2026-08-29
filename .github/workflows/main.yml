@@ -609,8 +609,7 @@ jobs:
         # the fork's extra commits, so the version shown in the release
         # notes matches what the kernel reports and the manager displays.
         COMMITS_COUNT=$(git rev-list --count "$STOCK_COMMIT")
-        BASE_VERSION=30000
-        KSU_VERSION=$(expr $COMMITS_COUNT "+" $BASE_VERSION)
+        KSU_VERSION=33214
 
         # Extract git tag at the sync point
         KSU_GIT_TAG=$(git describe --tags --abbrev=0 "$STOCK_COMMIT" 2>/dev/null || echo "no-tag")
