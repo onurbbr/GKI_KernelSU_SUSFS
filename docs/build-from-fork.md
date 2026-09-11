@@ -72,7 +72,6 @@ Recommended settings for a first build:
 | Use cache | `false` for the first build | Avoids creating cache releases while testing the fork. Enable it later to speed up repeat builds. |
 | Kernel Version | One exact family | Prevents an all-family fan-out. |
 | OS patch level | One unique date or `lts` | Selects one matrix row. A numeric sublevel can match multiple dates. |
-| Kernel Branding | Your short brand name | Changes the kernel's local version string. |
 | Commit mode | `verified` | Uses the project's verified component pins where pins are supported. |
 | Root Flavor | One implementation | Produces one kernel instead of KernelSU-Next, KernelSU, and ReSukiSU builds. |
 | Feature toggles | Keep the defaults initially | Establishes a known baseline before customizing features. |
@@ -123,7 +122,6 @@ gh workflow run main.yml \
   -f release_type=Action \
   -f kernel_build_version=6.6.x-android15 \
   -f os_patch_level=lts \
-  -f brand_name=MyKernel \
   -f commit_mode=verified \
   -f root_flavor=KernelSU \
   -f use_cache=false
@@ -138,7 +136,6 @@ gh workflow run main.yml \
   -f release_type=Action \
   -f kernel_build_version=6.1.x-android14 \
   -f os_patch_level=118 \
-  -f brand_name=MyKernel \
   -f commit_mode=verified \
   -f root_flavor=KernelSU \
   -f use_cache=false
@@ -217,7 +214,7 @@ Follow the [Installation Guide](installation.md), then complete the [Post-instal
 
 ## 7. Customize Safely
 
-For input-only changes such as branding, root flavor, or most feature toggles, you do not need to edit the repository. Select the values when dispatching the workflow.
+For input-only changes such as root flavor or most feature toggles, you do not need to edit the repository. Select the values when dispatching the workflow.
 
 > [!WARNING]
 > Keep **SUSFS** and **NoMount** enabled for now. Disabling SUSFS leaves its commit unavailable to the required metadata validation. Disabling NoMount still passes its resolved commit into the kernel build but skips the corresponding metamodule artifact. Either choice causes a later metadata step to fail, so these toggles do not currently produce a supported SUSFS-free or NoMount-free build.
