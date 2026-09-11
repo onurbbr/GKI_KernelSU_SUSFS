@@ -438,6 +438,35 @@ jobs:
     - name: Initialize Config Fragment
       run: touch "${{ github.workspace }}/wild_gki.fragment"
 
+    - name: Check KernelSU hook backend requirement
+      id: ksu-backend
+      shell: bash
+      working-directory: ${{ github.workspace }}/kernel
+      run: |
+        set -euo pipefail
+        # KernelSU-Next needs a hook backend: CONFIG_KPROBES=y or
+        # CONFIG_KSU_SUSFS=y in the final defconfig. If neither is set,
+        # the next step enables KPROBES.
+        need="false"
+        for d in common/drivers drivers; do
+          if [ -e "$d/kernelsu" ] || [ -L "$d/kernelsu" ]; then
+            kprobes="$(grep -E '^CONFIG_KPROBES=' common/arch/arm64/configs/gki_defconfig || true)"
+            susfs="$(grep -E '^CONFIG_KSU_SUSFS=' common/arch/arm64/configs/gki_defconfig || true)"
+            if [ "$kprobes" != "CONFIG_KPROBES=y" ] && [ "$susfs" != "CONFIG_KSU_SUSFS=y" ]; then
+              need="true"
+            fi
+          fi
+        done
+        echo "need=${need}" >> "$GITHUB_OUTPUT"
+        echo "KernelSU hook backend missing, will enable KPROBES: ${need}"
+
+    - name: Ensure CONFIG_KPROBES for KernelSU hook backend
+      if: steps.ksu-backend.outputs.need == 'true'
+      uses: ./.github/actions/set-kernel-config
+      with:
+        config_list: |
+          CONFIG_KPROBES=y
+
     - name: Apply Kernel Bypass Hack
       if: ${{ inputs.bypass == 'true' }}
       uses: ./.github/actions/bypass-kernel

@@ -92,6 +92,18 @@ runs:
         grep -q 'source "drivers/kernelsu/Kconfig"' "$drivers_dir/Kconfig" ||
           sed -i '/endmenu/i source "drivers/kernelsu/Kconfig"' "$drivers_dir/Kconfig"
 
+        # KernelSU-Next's Kbuild hard-errors at parse time unless CONFIG_KPROBES=y
+        # or CONFIG_KSU_SUSFS=y. Kbuild files are also parsed for config-less
+        # targets (build.sh runs `make mrproper` during setup), where CONFIG_*
+        # are always empty, so the guard can never pass there and breaks every
+        # build. Drop just the $(error) line (empty ifneq/endif stays valid);
+        # the backend requirement itself is enforced via defconfig, see
+        # build.yml "Check KernelSU hook backend requirement".
+        if grep -q 'KernelSU requires either' "$drivers_dir/kernelsu/Kbuild"; then
+          sed -i '/KernelSU requires either/d' "$drivers_dir/kernelsu/Kbuild"
+          echo "Relaxed KernelSU Kbuild hook-backend guard (parse-time only)"
+        fi
+
         echo "ROOT_IMPLEMENTATION=$flavor" >> "$GITHUB_ENV"
         echo "ROOT_MANAGER=$manager" >> "$GITHUB_ENV"
         echo "ROOT_VERSION=$root_version" >> "$GITHUB_ENV"
