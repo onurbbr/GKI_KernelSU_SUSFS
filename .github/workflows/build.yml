@@ -307,17 +307,15 @@ jobs:
       with:
         kernel_version: ${{ inputs.kernel_version }}
 
-    - name: Apply NetHunter WiFi Injection Patch
+    - name: NetHunter Setup
       if: contains(inputs.feature_set, 'NH') || inputs.feature_set == 'All'
-      uses: ./.github/actions/nethunter-patches
+      uses: ./.github/actions/nethunter
       with:
         kernel_version: ${{ inputs.kernel_version }}
         commit: ${{ inputs.nethunter_patches_commit }}
 
     - name: Setup Misc Configs
       uses: ./.github/actions/misc
-      with:
-        enable_nethunter: ${{ contains(inputs.feature_set, 'NH') || inputs.feature_set == 'All' }}
 
     - name: Enable BPF Stack (BTF + eBPF + FUSE-BPF)
       if: contains(inputs.feature_set, 'BPF')

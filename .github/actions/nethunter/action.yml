@@ -1,0 +1,130 @@
+name: 'NetHunter Setup'
+description: 'Apply NetHunter kernel configs and GKI-adapted WiFi frame-injection patch (5.10/5.15/6.1/6.6)'
+inputs:
+  kernel_version:
+    description: 'Kernel version (e.g., 6.1)'
+    required: true
+  commit:
+    description: 'Pinned kali-nethunter-kernel-patches commit SHA'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Enable NetHunter Configs
+      uses: ./.github/actions/set-kernel-config
+      with:
+        config_list: |
+          CONFIG_BT_HCIBTUSB=y
+          CONFIG_BT_HCIBTUSB_BCM=y
+          CONFIG_BT_HCIBTUSB_RTL=y
+          CONFIG_BT_HCIUART=y
+          CONFIG_BT_HCIUART_H4=y
+          CONFIG_BT_HCIBCM203X=y
+          CONFIG_BT_HCIBPA10X=y
+          CONFIG_BT_HCIBFUSB=y
+          CONFIG_BT_HCIVHCI=y
+          CONFIG_CFG80211_WEXT=y
+          CONFIG_MAC80211=y
+          CONFIG_MAC80211_MESH=y
+          CONFIG_USB_RTL8150=y
+          CONFIG_USB_RTL8152=y
+          CONFIG_WLAN_VENDOR_ATH=y
+          CONFIG_ATH9K_HTC=y
+          CONFIG_CARL9170=y
+          CONFIG_ATH6KL=y
+          CONFIG_ATH6KL_USB=y
+          CONFIG_WLAN_VENDOR_MEDIATEK=y
+          CONFIG_MT7601U=y
+          CONFIG_WLAN_VENDOR_RALINK=y
+          CONFIG_RT2X00=y
+          CONFIG_RT2500USB=y
+          CONFIG_RT73USB=y
+          CONFIG_RT2800USB=y
+          CONFIG_RT2800USB_RT33XX=y
+          CONFIG_RT2800USB_RT35XX=y
+          CONFIG_RT2800USB_RT3573=y
+          CONFIG_RT2800USB_RT53XX=y
+          CONFIG_RT2800USB_RT55XX=y
+          CONFIG_RT2800USB_UNKNOWN=y
+          CONFIG_WLAN_VENDOR_REALTEK=y
+          CONFIG_RTL8187=y
+          CONFIG_RTL_CARDS=y
+          CONFIG_RTL8192CU=y
+          CONFIG_RTL8XXXU_UNTESTED=y
+          CONFIG_WLAN_VENDOR_ZYDAS=y
+          CONFIG_USB_ZD1201=y
+          CONFIG_ZD1211RW=y
+          CONFIG_USB_NET_RNDIS_WLAN=y
+          CONFIG_MEDIA_USB_SUPPORT=y
+          CONFIG_USB_ACM=y
+          CONFIG_USB_CONFIGFS_SERIAL=y
+          CONFIG_USB_CONFIGFS_ACM=y
+          CONFIG_USB_CONFIGFS_OBEX=y
+          CONFIG_USB_CONFIGFS_NCM=y
+          CONFIG_USB_CONFIGFS_ECM=y
+          CONFIG_USB_CONFIGFS_ECM_SUBSET=y
+          CONFIG_USB_CONFIGFS_RNDIS=y
+          CONFIG_USB_CONFIGFS_EEM=y
+          CONFIG_USB_CONFIGFS_MASS_STORAGE=y
+          CONFIG_USB_CONFIGFS_F_HID=y
+          CONFIG_CAN=y
+          CONFIG_CAN_RAW=y
+          CONFIG_CAN_BCM=y
+          CONFIG_CAN_GW=y
+          CONFIG_CAN_VCAN=y
+          CONFIG_CAN_SLCAN=y
+          CONFIG_CAN_DEV=y
+          CONFIG_CAN_CALC_BITTIMING=y
+          CONFIG_CAN_LEDS=y
+          CONFIG_CAN_GRCAN=y
+          CONFIG_CAN_XILINXCAN=y
+          CONFIG_CAN_C_CAN=y
+          CONFIG_CAN_CC770=y
+          CONFIG_CAN_IFI_CANFD=y
+          CONFIG_CAN_M_CAN=y
+          CONFIG_CAN_SJA1000=y
+          CONFIG_CAN_SOFTING=y
+          CONFIG_CAN_HI311X=y
+          CONFIG_CAN_MCP251X=y
+          CONFIG_CAN_EMS_USB=y
+          CONFIG_CAN_ESD_USB=y
+          CONFIG_CAN_GS_USB=y
+          CONFIG_CAN_KVASER_USB=y
+          CONFIG_CAN_PEAK_USB=y
+          CONFIG_CAN_8DEV_USB=y
+          CONFIG_VSOCKETS=y
+          CONFIG_NETLINK_DIAG=y
+          CONFIG_USB_SERIAL_CONSOLE=y
+          CONFIG_USB_SERIAL_GENERIC=y
+          CONFIG_USB_SERIAL_CH341=y
+          CONFIG_USB_SERIAL_FTDI_SIO=y
+          CONFIG_NFS_V2=y
+          CONFIG_NFS_V3=y
+          CONFIG_NFS_V4=y
+          CONFIG_NFSD=y
+          CONFIG_NFSD_V3=y
+          CONFIG_NFSD_V4=y
+
+    - name: Apply NetHunter WiFi Injection Patch
+      shell: bash
+      working-directory: ${{ github.workspace }}/kernel/common
+      run: |
+        set -euo pipefail
+        KERNEL_VERSION="${{ inputs.kernel_version }}"
+        case "$KERNEL_VERSION" in
+          5.10|5.15|6.1|6.6) ;;
+          *)
+            echo "No NetHunter injection patch for kernel $KERNEL_VERSION, skipping"
+            exit 0
+            ;;
+        esac
+        if ! [[ "${{ inputs.commit }}" =~ ^[0-9a-f]{40}$ ]]; then
+          echo "NetHunter patches commit must be a full 40-character SHA." >&2
+          exit 2
+        fi
+        curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors --connect-timeout 30 \
+          "https://raw.githubusercontent.com/wumingzhinu/kali-nethunter-kernel-patches/${{ inputs.commit }}/adapted/${KERNEL_VERSION}/add-wifi-injection-${KERNEL_VERSION}.patch" \
+          -o /tmp/nethunter-injection.patch
+        patch -p1 --forward < /tmp/nethunter-injection.patch
+        echo "[+] NetHunter WiFi injection patch applied for $KERNEL_VERSION"
