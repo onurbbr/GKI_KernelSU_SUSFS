@@ -17,6 +17,13 @@ runs:
     working-directory: ${{ github.workspace }}/kernel
     run: |
       sed -i 's/check_defconfig//' ./common/build.config.gki
+      # Our feature configs (e.g. NetHunter DVB/SDR) build extra modules that
+      # are intentionally absent from the GKI modules list (Image-only
+      # artifacts via AnyKernel3). Without this, build.sh fails with
+      # "ERROR: modules list out of date" on any config delta.
+      if [ -f ./common/build.config.gki.aarch64 ]; then
+        sed -i '/^MODULES_ORDER=/d' ./common/build.config.gki.aarch64
+      fi
       if [ -f "build/build.sh" ]; then
         BUILD_GKI_ARTIFACTS="" \
         BUILD_GKI_CERTIFICATION_TOOLS=0 \
