@@ -99,6 +99,10 @@ on:
         description: "Performance"
         type: boolean
         default: true
+      use_nethunter:
+        description: "NetHunter (configs + WiFi injection patch)"
+        type: boolean
+        default: true
       test_release_notes:
         description: "Render release notes preview only (skip all builds + release)"
         type: boolean
@@ -416,6 +420,7 @@ jobs:
           [ "${{ inputs.use_unicode }}" = "true" ] && FEATURES="${FEATURES}Unicode+"
           [ "${{ inputs.use_bpf }}" = "true" ] && FEATURES="${FEATURES}BPF+"
           [ "${{ inputs.use_perf }}" = "true" ] && FEATURES="${FEATURES}Perf+"
+          [ "${{ inputs.use_nethunter }}" = "true" ] && FEATURES="${FEATURES}NH+"
           echo "feature_set=${FEATURES%+}" >> "$GITHUB_OUTPUT"
 
       - name: Clone shared source repos once
@@ -1409,6 +1414,7 @@ jobs:
           USE_UNICODE: ${{ inputs.use_unicode }}
           USE_BPF: ${{ inputs.use_bpf }}
           USE_PERF: ${{ inputs.use_perf }}
+          USE_NETHUNTER: ${{ inputs.use_nethunter }}
           USE_CACHE: ${{ inputs.use_cache }}
           KERNEL_BUILD_VERSION: ${{ inputs.kernel_build_version }}
           NOMOUNT_COMMIT: ${{ needs.resolve-sources.outputs.nomount_commit }}
@@ -1453,6 +1459,7 @@ jobs:
           if env("USE_UNICODE","true")=="true": feats.append("Unicode Fix")
           if env("USE_BPF","true")=="true": feats.append("BTF / eBPF / FUSE-BPF")
           if env("USE_PERF","true")=="true": feats.append("Performance Tuning")
+          if env("USE_NETHUNTER","true")=="true": feats.append("NetHunter")
           lines=[]
           lines.append("# Wild Kernels for GKI2 Devices")
           lines.append("")

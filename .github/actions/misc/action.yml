@@ -16,6 +16,10 @@ inputs:
   variant:
     description: 'Build variant (Normal, Bypass, Wild, boot-time)'
     required: true
+  enable_nethunter:
+    description: 'Apply NetHunter kernel configs'
+    required: false
+    default: 'true'
 
 runs:
   using: "composite"
@@ -42,6 +46,7 @@ runs:
           CONFIG_ZRAM_DEF_COMP="lz4"
 
     - name: Enable NetHunter Configs
+      if: inputs.enable_nethunter == 'true'
       uses: ./.github/actions/set-kernel-config
       with:
         config_list: |
