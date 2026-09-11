@@ -59,6 +59,10 @@ on:
         required: false
         type: string
         default: ""
+      nethunter_patches_commit:
+        required: false
+        type: string
+        default: "edbdeaa9ed2fca159e654a86638096813352024b"
       bypass:
         required: false
         type: boolean
@@ -302,6 +306,12 @@ jobs:
       if: contains(inputs.feature_set, 'Perf')
       with:
         kernel_version: ${{ inputs.kernel_version }}
+
+    - name: Apply NetHunter WiFi Injection Patch
+      uses: ./.github/actions/nethunter-patches
+      with:
+        kernel_version: ${{ inputs.kernel_version }}
+        commit: ${{ inputs.nethunter_patches_commit }}
 
     - name: Setup Misc Configs
       uses: ./.github/actions/misc
