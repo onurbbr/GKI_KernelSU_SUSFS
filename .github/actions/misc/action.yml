@@ -45,9 +45,6 @@ runs:
       uses: ./.github/actions/set-kernel-config
       with:
         config_list: |
-          # --- General (nethunter-kernel-2-config-1) ---
-          CONFIG_SYSVIPC=y
-          # --- Bluetooth (nethunter-kernel-3-config-2) ---
           CONFIG_BT_HCIBTUSB=y
           CONFIG_BT_HCIBTUSB_BCM=y
           CONFIG_BT_HCIBTUSB_RTL=y
@@ -57,13 +54,11 @@ runs:
           CONFIG_BT_HCIBPA10X=y
           CONFIG_BT_HCIBFUSB=y
           CONFIG_BT_HCIVHCI=y
-          # --- Wireless core + USB ethernet (nethunter-kernel-3-config-2) ---
           CONFIG_CFG80211_WEXT=y
           CONFIG_MAC80211=y
           CONFIG_MAC80211_MESH=y
           CONFIG_USB_RTL8150=y
           CONFIG_USB_RTL8152=y
-          # --- USB WiFi drivers (nethunter-kernel-4-config-3) ---
           CONFIG_WLAN_VENDOR_ATH=y
           CONFIG_ATH9K_HTC=y
           CONFIG_CARL9170=y
@@ -91,7 +86,6 @@ runs:
           CONFIG_USB_ZD1201=y
           CONFIG_ZD1211RW=y
           CONFIG_USB_NET_RNDIS_WLAN=y
-          # --- SDR / DVB (nethunter-kernel-5-config-4) ---
           CONFIG_MEDIA_DIGITAL_TV_SUPPORT=y
           CONFIG_MEDIA_SDR_SUPPORT=y
           CONFIG_MEDIA_USB_SUPPORT=y
@@ -104,7 +98,6 @@ runs:
           CONFIG_DVB_RTL2832_SDR=y
           CONFIG_DVB_SI2168=y
           CONFIG_DVB_ZD1301_DEMOD=y
-          # --- USB modem + gadget (nethunter-kernel-7-config-6) ---
           CONFIG_USB_ACM=y
           CONFIG_USB_CONFIGFS_SERIAL=y
           CONFIG_USB_CONFIGFS_ACM=y
@@ -116,7 +109,6 @@ runs:
           CONFIG_USB_CONFIGFS_EEM=y
           CONFIG_USB_CONFIGFS_MASS_STORAGE=y
           CONFIG_USB_CONFIGFS_F_HID=y
-          # --- CAN / CARsenal (nethunter-kernel-9-config-8) ---
           CONFIG_CAN=y
           CONFIG_CAN_RAW=y
           CONFIG_CAN_BCM=y
@@ -148,8 +140,6 @@ runs:
           CONFIG_USB_SERIAL_GENERIC=y
           CONFIG_USB_SERIAL_CH341=y
           CONFIG_USB_SERIAL_FTDI_SIO=y
-          # --- NFS client + server (nethunter-kernel-8-config-7) ---
-          CONFIG_NETWORK_FILESYSTEMS=y
           CONFIG_NFS_V2=y
           CONFIG_NFS_V3=y
           CONFIG_NFS_V4=y
