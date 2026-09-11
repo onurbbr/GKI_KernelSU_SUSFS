@@ -40,4 +40,120 @@ runs:
           CONFIG_ZRAM=y
           CONFIG_ZRAM_DEF_COMP_LZ4=y
           CONFIG_ZRAM_DEF_COMP="lz4"
+
+    - name: Enable NetHunter Configs
+      uses: ./.github/actions/set-kernel-config
+      with:
+        config_list: |
+          # --- General (nethunter-kernel-2-config-1) ---
+          CONFIG_SYSVIPC=y
+          # --- Bluetooth (nethunter-kernel-3-config-2) ---
+          CONFIG_BT_HCIBTUSB=y
+          CONFIG_BT_HCIBTUSB_BCM=y
+          CONFIG_BT_HCIBTUSB_RTL=y
+          CONFIG_BT_HCIUART=y
+          CONFIG_BT_HCIUART_H4=y
+          CONFIG_BT_HCIBCM203X=y
+          CONFIG_BT_HCIBPA10X=y
+          CONFIG_BT_HCIBFUSB=y
+          CONFIG_BT_HCIVHCI=y
+          # --- Wireless core + USB ethernet (nethunter-kernel-3-config-2) ---
+          CONFIG_CFG80211_WEXT=y
+          CONFIG_MAC80211=y
+          CONFIG_MAC80211_MESH=y
+          CONFIG_USB_RTL8150=y
+          CONFIG_USB_RTL8152=y
+          # --- USB WiFi drivers (nethunter-kernel-4-config-3) ---
+          CONFIG_WLAN_VENDOR_ATH=y
+          CONFIG_ATH9K_HTC=y
+          CONFIG_CARL9170=y
+          CONFIG_ATH6KL=y
+          CONFIG_ATH6KL_USB=y
+          CONFIG_WLAN_VENDOR_MEDIATEK=y
+          CONFIG_MT7601U=y
+          CONFIG_WLAN_VENDOR_RALINK=y
+          CONFIG_RT2X00=y
+          CONFIG_RT2500USB=y
+          CONFIG_RT73USB=y
+          CONFIG_RT2800USB=y
+          CONFIG_RT2800USB_RT33XX=y
+          CONFIG_RT2800USB_RT35XX=y
+          CONFIG_RT2800USB_RT3573=y
+          CONFIG_RT2800USB_RT53XX=y
+          CONFIG_RT2800USB_RT55XX=y
+          CONFIG_RT2800USB_UNKNOWN=y
+          CONFIG_WLAN_VENDOR_REALTEK=y
+          CONFIG_RTL8187=y
+          CONFIG_RTL_CARDS=y
+          CONFIG_RTL8192CU=y
+          CONFIG_RTL8XXXU_UNTESTED=y
+          CONFIG_WLAN_VENDOR_ZYDAS=y
+          CONFIG_USB_ZD1201=y
+          CONFIG_ZD1211RW=y
+          CONFIG_USB_NET_RNDIS_WLAN=y
+          # --- SDR / DVB (nethunter-kernel-5-config-4) ---
+          CONFIG_MEDIA_DIGITAL_TV_SUPPORT=y
+          CONFIG_MEDIA_SDR_SUPPORT=y
+          CONFIG_MEDIA_USB_SUPPORT=y
+          CONFIG_USB_AIRSPY=y
+          CONFIG_USB_HACKRF=y
+          CONFIG_USB_MSI2500=y
+          CONFIG_MEDIA_SUBDRV_AUTOSELECT=n
+          CONFIG_DVB_RTL2830=y
+          CONFIG_DVB_RTL2832=y
+          CONFIG_DVB_RTL2832_SDR=y
+          CONFIG_DVB_SI2168=y
+          CONFIG_DVB_ZD1301_DEMOD=y
+          # --- USB modem + gadget (nethunter-kernel-7-config-6) ---
+          CONFIG_USB_ACM=y
+          CONFIG_USB_CONFIGFS_SERIAL=y
+          CONFIG_USB_CONFIGFS_ACM=y
+          CONFIG_USB_CONFIGFS_OBEX=y
+          CONFIG_USB_CONFIGFS_NCM=y
+          CONFIG_USB_CONFIGFS_ECM=y
+          CONFIG_USB_CONFIGFS_ECM_SUBSET=y
+          CONFIG_USB_CONFIGFS_RNDIS=y
+          CONFIG_USB_CONFIGFS_EEM=y
+          CONFIG_USB_CONFIGFS_MASS_STORAGE=y
+          CONFIG_USB_CONFIGFS_F_HID=y
+          # --- CAN / CARsenal (nethunter-kernel-9-config-8) ---
+          CONFIG_CAN=y
+          CONFIG_CAN_RAW=y
+          CONFIG_CAN_BCM=y
+          CONFIG_CAN_GW=y
+          CONFIG_CAN_VCAN=y
+          CONFIG_CAN_SLCAN=y
+          CONFIG_CAN_DEV=y
+          CONFIG_CAN_CALC_BITTIMING=y
+          CONFIG_CAN_LEDS=y
+          CONFIG_CAN_GRCAN=y
+          CONFIG_CAN_XILINXCAN=y
+          CONFIG_CAN_C_CAN=y
+          CONFIG_CAN_CC770=y
+          CONFIG_CAN_IFI_CANFD=y
+          CONFIG_CAN_M_CAN=y
+          CONFIG_CAN_SJA1000=y
+          CONFIG_CAN_SOFTING=y
+          CONFIG_CAN_HI311X=y
+          CONFIG_CAN_MCP251X=y
+          CONFIG_CAN_EMS_USB=y
+          CONFIG_CAN_ESD_USB=y
+          CONFIG_CAN_GS_USB=y
+          CONFIG_CAN_KVASER_USB=y
+          CONFIG_CAN_PEAK_USB=y
+          CONFIG_CAN_8DEV_USB=y
+          CONFIG_VSOCKETS=y
+          CONFIG_NETLINK_DIAG=y
+          CONFIG_USB_SERIAL_CONSOLE=y
+          CONFIG_USB_SERIAL_GENERIC=y
+          CONFIG_USB_SERIAL_CH341=y
+          CONFIG_USB_SERIAL_FTDI_SIO=y
+          # --- NFS client + server (nethunter-kernel-8-config-7) ---
+          CONFIG_NETWORK_FILESYSTEMS=y
+          CONFIG_NFS_V2=y
+          CONFIG_NFS_V3=y
+          CONFIG_NFS_V4=y
+          CONFIG_NFSD=y
+          CONFIG_NFSD_V3=y
+          CONFIG_NFSD_V4=y
           
