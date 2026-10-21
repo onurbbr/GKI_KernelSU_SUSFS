@@ -52,7 +52,7 @@ on:
       keep_kmi:
         description: "Keep stock KMI generation suffix in kernel version (fix #265)"
         type: boolean
-        default: false
+        default: true
       commit_mode:
         description: "latest = branch tips, verified = audited pins"
         required: false
